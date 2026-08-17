@@ -1,0 +1,628 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | API Códigos Postales de México 🇲🇽</title>
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Leaflet Maps CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-card: rgba(30, 41, 59, 0.7);
+            --bg-card-hover: rgba(51, 65, 85, 0.8);
+            --accent-green: #10b981;
+            --accent-blue: #3b82f6;
+            --accent-purple: #8b5cf6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            --border-color: rgba(255, 255, 255, 0.08);
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-primary);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(16, 185, 129, 0.15) 0px, transparent 50%);
+            color: var(--text-main);
+            min-height: 100vh;
+            padding: 24px;
+        }
+
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 32px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+
+        .header-title i {
+            font-size: 2rem;
+            color: var(--accent-green);
+        }
+
+        .header-title h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        .header-title span {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+            font-weight: 400;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 12px;
+        }
+
+        .btn {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: var(--bg-card-hover);
+            transform: translateY(-2px);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            border: none;
+        }
+
+        .btn-primary:hover {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        /* Grid System */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            margin-bottom: 32px;
+        }
+
+        .stat-card {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            box-shadow: var(--glass-shadow);
+            transition: transform 0.2s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .stat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            color: var(--text-muted);
+            font-size: 0.85rem;
+        }
+
+        .stat-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .icon-blue { background: rgba(59, 130, 246, 0.15); color: var(--accent-blue); }
+        .icon-green { background: rgba(16, 185, 129, 0.15); color: var(--accent-green); }
+        .icon-purple { background: rgba(139, 92, 246, 0.15); color: var(--accent-purple); }
+        .icon-yellow { background: rgba(245, 158, 11, 0.15); color: #f59e0b; }
+
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .stat-footer {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+        }
+
+        /* Layout Principal */
+        .main-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        @media (max-width: 992px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .panel {
+            background: var(--bg-card);
+            backdrop-filter: blur(12px);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 24px;
+            box-shadow: var(--glass-shadow);
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .panel-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .chart-container {
+            position: relative;
+            height: 280px;
+            width: 100%;
+        }
+
+        /* Probador de CP & Mapa */
+        .search-box {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .input-text {
+            flex: 1;
+            background: rgba(15, 23, 42, 0.6);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 16px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .input-text:focus {
+            border-color: var(--accent-blue);
+        }
+
+        #map {
+            height: 260px;
+            border-radius: 12px;
+            border: 1px solid var(--border-color);
+            margin-top: 16px;
+            z-index: 1;
+        }
+
+        /* Terminal de Logs Viewer compacta */
+        .log-terminal {
+            background: #020617;
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 10px 14px;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 0.78rem;
+            max-height: 280px;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .log-line {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 1px 4px;
+            line-height: 1.2;
+            border-radius: 4px;
+            transition: background-color 0.15s ease;
+        }
+
+        .log-line:hover {
+            background-color: rgba(255, 255, 255, 0.04);
+        }
+
+        .log-time {
+            color: var(--text-muted);
+            font-size: 0.75rem;
+            white-space: nowrap;
+        }
+
+        .log-tag {
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 2px 6px;
+            border-radius: 4px;
+            text-transform: uppercase;
+            white-space: nowrap;
+        }
+
+        .tag-info { background: rgba(59, 130, 246, 0.2); color: #60a5fa; }
+        .tag-warning { background: rgba(245, 158, 11, 0.2); color: #fbbf24; }
+        .tag-error { background: rgba(239, 68, 68, 0.2); color: #f87171; }
+
+        .log-msg {
+            color: #e2e8f0;
+            word-break: break-all;
+        }
+
+        /* Json Viewer */
+        .json-viewer {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 14px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            color: #a7f3d0;
+            max-height: 180px;
+            overflow-y: auto;
+            margin-top: 12px;
+        }
+
+        /* Status Badge */
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            background: rgba(16, 185, 129, 0.15);
+            color: var(--accent-green);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .pulse-dot {
+            width: 8px;
+            height: 8px;
+            background-color: var(--accent-green);
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.7); }
+            70% { transform: scale(1); box-shadow: 0 0 0 6px rgba(16, 185, 129, 0); }
+            100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="header-title">
+            <i class="fa-solid fa-map-location-dot"></i>
+            <div>
+                <h1>API Códigos Postales 🇲🇽</h1>
+                <span>Panel Ejecutivo & Observabilidad en Tiempo Real</span>
+            </div>
+        </div>
+        <div class="nav-links">
+            <span class="status-badge"><span class="pulse-dot"></span> SQLite WAL Activo</span>
+            <a href="/docs" target="_blank" class="btn"><i class="fa-solid fa-code"></i> Swagger API</a>
+            <a href="/metrics" target="_blank" class="btn"><i class="fa-solid fa-chart-line"></i> Prometheus</a>
+        </div>
+    </header>
+
+    <!-- Tarjetas de Métricas -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-header">
+                <span>CÓDIGOS POSTALES</span>
+                <div class="stat-icon icon-blue"><i class="fa-solid fa-mail-bulk"></i></div>
+            </div>
+            <div class="stat-value" id="stat-cps">--</div>
+            <div class="stat-footer">CPs únicos indexados</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <span>ASENTAMIENTOS</span>
+                <div class="stat-icon icon-green"><i class="fa-solid fa-building-user"></i></div>
+            </div>
+            <div class="stat-value" id="stat-asentamientos">--</div>
+            <div class="stat-footer">Colonias y localidades</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <span>ESTADOS & MUNICIPIOS</span>
+                <div class="stat-icon icon-purple"><i class="fa-solid fa-city"></i></div>
+            </div>
+            <div class="stat-value" id="stat-entidades">32 / --</div>
+            <div class="stat-footer">Entidades Federativas</div>
+        </div>
+
+        <div class="stat-card">
+            <div class="stat-header">
+                <span>LATENCIA MEDIA</span>
+                <div class="stat-icon icon-yellow"><i class="fa-solid fa-bolt"></i></div>
+            </div>
+            <div class="stat-value" id="stat-latency">&lt; 1 ms</div>
+            <div class="stat-footer">SQLite WAL + RAM Cache</div>
+        </div>
+    </div>
+
+    <!-- Layout Principal de Gráficas y Probador -->
+    <div class="main-layout">
+
+        <!-- Panel Izquierdo: Gráficos Estadísticos -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa-solid fa-chart-pie" style="color: var(--accent-blue);"></i>
+                    Top Tipos de Asentamiento
+                </div>
+            </div>
+            <div class="chart-container">
+                <canvas id="tiposChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Panel Derecho: Probador de CP & Mapa GeoJSON -->
+        <div class="panel">
+            <div class="panel-header">
+                <div class="panel-title">
+                    <i class="fa-solid fa-magnifying-glass-location" style="color: var(--accent-green);"></i>
+                    Probador de CP & GeoJSON Viewer
+                </div>
+            </div>
+
+            <div class="search-box">
+                <input type="text" id="cpInput" class="input-text" placeholder="Ingrese CP (ej. 01000, 64000)..." value="01000" maxlength="5">
+                <button class="btn btn-primary" onclick="consultarCP()"><i class="fa-solid fa-search"></i> Consultar</button>
+            </div>
+
+            <!-- Mapa Interactivo Leaflet -->
+            <div id="map"></div>
+
+            <!-- Respuesta JSON -->
+            <div class="json-viewer" id="jsonResult">Cargando datos de consulta...</div>
+        </div>
+
+    </div>
+
+    <!-- Panel de Logs de Auditoría en Vivo (Full Width) -->
+    <div class="panel" style="margin-bottom: 32px; width: 100%;">
+        <div class="panel-header">
+            <div class="panel-title">
+                <i class="fa-solid fa-terminal" style="color: var(--accent-purple);"></i>
+                Registro de Auditoría & Logs en Tiempo Real
+            </div>
+            <button class="btn" onclick="loadLogs()"><i class="fa-solid fa-rotate-right"></i> Refrescar Logs</button>
+        </div>
+
+        <div class="log-terminal" id="logTerminal">
+            <div class="log-line">Cargando eventos de auditoría...</div>
+        </div>
+    </div>
+
+    <!-- Chart.js y Leaflet CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+    <script>
+        let map, markerGroup;
+
+        // Inicializar Mapa Leaflet con Selector de Múltiples Capas
+        function initMap() {
+            const darkLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap &copy; CARTO',
+                maxZoom: 19
+            });
+
+            const osmLayer = L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; OpenStreetMap contributors',
+                maxZoom: 19
+            });
+
+            const satelliteLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+                attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community',
+                maxZoom: 18
+            });
+
+            const lightLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+                attribution: '&copy; OpenStreetMap &copy; CARTO',
+                maxZoom: 19
+            });
+
+            map = L.map('map', {
+                center: [19.4326, -99.1332],
+                zoom: 11,
+                layers: [osmLayer]
+            });
+
+            const baseMaps = {
+                "🗺️ Callejero (OSM)": osmLayer,
+                "🛰️ Satélite (Esri)": satelliteLayer,
+                "🌙 Carto - Dark": darkLayer,
+                "☀️ Carto - Claro": lightLayer
+            };
+
+            L.control.layers(baseMaps).addTo(map);
+            markerGroup = L.layerGroup().addTo(map);
+        }
+
+        // Cargar Estadísticas
+        async function loadStats() {
+            try {
+                const res = await fetch('/api/v1/stats');
+                const data = await res.json();
+
+                document.getElementById('stat-cps').innerText = data.total_codigos_postales.toLocaleString();
+                document.getElementById('stat-asentamientos').innerText = data.total_asentamientos.toLocaleString();
+                document.getElementById('stat-entidades').innerText = `${data.total_estados} / ${data.total_municipios.toLocaleString()}`;
+
+                // Renderizar Chart.js
+                const labels = Object.keys(data.tipos_asentamiento_conteo).slice(0, 7);
+                const values = Object.values(data.tipos_asentamiento_conteo).slice(0, 7);
+
+                const ctx = document.getElementById('tiposChart').getContext('2d');
+                new Chart(ctx, {
+                    type: 'doughnut',
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: values,
+                            backgroundColor: [
+                                '#10b981', '#3b82f6', '#8b5cf6', '#f59e0b',
+                                '#ec4899', '#6366f1', '#14b8a6'
+                            ],
+                            borderWidth: 0
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                position: 'right',
+                                labels: { color: '#94a3b8', font: { family: 'Inter', size: 11 } }
+                            }
+                        }
+                    }
+                });
+            } catch (err) {
+                console.error("Error cargando estadísticas:", err);
+            }
+        }
+
+        // Consultar CP y renderizar en Mapa & JSON
+        async function consultarCP() {
+            const cp = document.getElementById('cpInput').value.trim();
+            if (!/^[0-9]{5}$/.test(cp)) {
+                alert("Por favor ingrese un código postal de 5 dígitos válido.");
+                return;
+            }
+
+            try {
+                // Obtener JSON y GeoJSON
+                const [resDetail, resGeo] = await Promise.all([
+                    fetch(`/api/v1/codigo-postal/${cp}`),
+                    fetch(`/api/v1/codigo-postal/${cp}/geojson`)
+                ]);
+
+                if (!resDetail.ok) {
+                    const err = await resDetail.json();
+                    document.getElementById('jsonResult').innerText = JSON.stringify(err, null, 2);
+                    return;
+                }
+
+                const detail = await resDetail.json();
+                const geo = await resGeo.json();
+
+                document.getElementById('jsonResult').innerText = JSON.stringify(detail, null, 2);
+
+                // Renderizar Pines en Mapa
+                markerGroup.clearLayers();
+                if (geo.features && geo.features.length > 0) {
+                    const coords = [];
+                    geo.features.forEach(f => {
+                        const [lng, lat] = f.geometry.coordinates;
+                        coords.push([lat, lng]);
+                        L.marker([lat, lng])
+                            .bindPopup(`<b>${f.properties.nombre}</b><br>${f.properties.tipo_asentamiento}`)
+                            .addTo(markerGroup);
+                    });
+
+                    map.fitBounds(coords, { padding: [40, 40], maxZoom: 14 });
+                }
+            } catch (err) {
+                console.error("Error consultando CP:", err);
+            }
+        }
+
+        // Cargar Logs de Auditoría
+        async function loadLogs() {
+            try {
+                const res = await fetch('/api/v1/logs?limit=40');
+                if (!res.ok) return;
+                const data = await res.json();
+                const term = document.getElementById('logTerminal');
+
+                if (data.logs.length === 0) {
+                    term.innerHTML = '<div class="log-line">No hay eventos de auditoría registrados en este periodo.</div>';
+                    return;
+                }
+
+                term.innerHTML = data.logs.map(log => {
+                    let tagClass = 'tag-info';
+                    if (log.level === 'WARNING' || log.message.includes('Status: 4')) tagClass = 'tag-warning';
+                    if (log.level === 'ERROR' || log.message.includes('Status: 5')) tagClass = 'tag-error';
+
+                    return `<div class="log-line">
+                        <span class="log-time">[${log.timestamp || 'SYSTEM'}]</span>
+                        <span class="log-tag ${tagClass}">${log.level}</span>
+                        <span class="log-msg">${log.message}</span>
+                    </div>`;
+                }).join('');
+
+                term.scrollTop = term.scrollHeight;
+            } catch (err) {
+                console.error("Error cargando logs:", err);
+            }
+        }
+
+        window.onload = () => {
+            initMap();
+            loadStats();
+            consultarCP();
+            loadLogs();
+            setInterval(loadLogs, 4000); // Polling automático cada 4s
+        };
+    </script>
+</body>
+</html>

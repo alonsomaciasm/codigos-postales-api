@@ -1,0 +1,55 @@
+# Python / Virtualenv
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+env/
+venv/
+ENV/
+
+# Archivos de Entorno
+.env
+!.env.example
+
+# IDEs, Editores y Entornos de Desarrollo
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Archivos Temporales de la IDE y Linter (Pyrefly / Antigravity)
+.gemini/
+__pyrefly_virtual__/
+.pyrefly/
+
+# Test & Cobertura
+.pytest_cache/
+.coverage
+htmlcov/
+test_pdf.pdf
+
+# Compilados de SDKs
+sdk/typescript/dist/
+sdk/python/*.egg-info/
+sdk/python/build/
+sdk/python/dist/
+
+# Archivos de Base de Datos, Fuente Externa y Logs
+*.db
+*.db-wal
+*.db-shm
+*.sqlite
+*.sqlite-wal
+*.sqlite-shm
+sepomex.db
+sepomex.db-wal
+sepomex.db-shm
+CPdescarga.txt
+*.log
+logs/*.log
+scratch/
+
+# Directorio de Pruebas Científicas y Manuscrito del Artículo
+paper_experiments/

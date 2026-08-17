@@ -1,0 +1,18 @@
+version: '3.8'
+
+services:
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: codigos_postales_api
+    ports:
+      - "8080:8000"
+    environment:
+      - PROJECT_NAME=API Códigos Postales de México
+      - LOG_LEVEL=INFO
+      - DB_PATH=/app/sepomex.db
+    volumes:
+      - ./sepomex.db:/app/sepomex.db:ro  # BD en modo Solo Lectura dentro del contenedor
+      - ./logs:/app/logs                  # Volumen persistente para logs con rotación diaria
+    restart: unless-stopped

@@ -1,0 +1,23 @@
+{
+  "name": "mx-postal-client",
+  "version": "1.0.0",
+  "description": "SDK Cliente Oficial en TypeScript/JavaScript para consumir la API de Códigos Postales de México",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc"
+  },
+  "keywords": [
+    "sepomex",
+    "codigos-postales",
+    "mexico",
+    "sat",
+    "cfdi",
+    "sdk"
+  ],
+  "author": "API Códigos Postales Team",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
