@@ -1,0 +1,70 @@
+MIT License
+
+Copyright (c) 2026 MC. José Alonso Macías Montoya / Universidad Politécnica de Chiapas
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice, this permission notice, and the following conditions
+shall be included in all copies or substantial portions of the Software:
+
+1. ATRIBUCIÓN DE AUTORÍA: En caso de utilizar, modificar, publicar o redistribuir 
+   este código o API en otros proyectos académicos, comerciales o de software libre, 
+   se solicita mantener la debida mención o atribución de autoría al MC. José Alonso 
+   Macías Montoya y a la Universidad Politécnica de Chiapas.
+
+2. CUMPLIMIENTO LFPDPPP (MÉXICO) Y PROTECCIÓN DE DATOS: Esta API ha sido diseñada 
+   bajo arquitectura Stateless (Sin Persistencia de datos personales). Todo el procesamiento 
+   se efectúa en memoria volátil únicamente durante el ciclo de solicitud/respuesta. 
+   Cualquier persona física o moral que despliegue o aloje esta API hacia terceros 
+   asume de forma exclusiva el carácter de "Responsable del Tratamiento de Datos Personales" 
+   en apego a la Ley Federal de Protección de Datos Personales en Posesión de los Particulares 
+   (LFPDPPP) y disposiciones del INAI.
+
+3. DESLINDE DE RESPONSABILIDAD: El autor (MC. José Alonso Macías Montoya) y la 
+   Universidad Politécnica de Chiapas quedan completamente liberados de cualquier 
+   responsabilidad legal, civil, administrativa, penal o comercial derivada del uso, 
+   mal uso, almacenamiento indebido o tratamiento no autorizado de información que 
+   realicen terceros utilizando esta herramienta.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+---
+
+### COMPREHENSIVE THIRD-PARTY ATTRIBUTION AND CREDITS
+
+This software incorporates open-source software packages, open datasets, and web fonts. Full attribution is extended to their respective authors and maintainers:
+
+#### 1. Official Open Datasets & Source Attribution
+- **Servicio Postal Mexicano (SEPOMEX) / datos.gob.mx**: Catálogo Nacional de Códigos Postales de México (Creative Commons Attribution 4.0 International - CC BY 4.0).
+- **Servicio de Administración Tributaria (SAT)**: Catálogo de Claves de Entidades y Municipios para Facturación Electrónica CFDI 4.0 (Dominio Público / Normativa Oficial).
+
+#### 2. Core Software Frameworks & Runtime Libraries
+- **FastAPI**: Created by Sebastián Ramírez / Tiangolo (MIT License).
+- **Pydantic & Pydantic-Settings**: Maintained by Samuel Colvin & Pydantic Services Inc. (MIT License).
+- **Uvicorn**: Maintained by Encode & Tom Christie (BSD 3-Clause License).
+- **Granian**: Created by Giovanni Barotta (BSD 3-Clause License).
+- **orjson**: Created by Eric J. Smith / Jpype team (Apache 2.0 / MIT License).
+- **Loguru**: Created by Delgan (MIT License).
+- **HTTPX**: Maintained by Encode (BSD 3-Clause License).
+- **SlowAPI (Rate Limiting)**: Maintained by Lauris Jullien (MIT License).
+- **PyJWT**: Maintained by José Padilla & contributors (MIT License).
+- **ReportLab**: Maintained by ReportLab Inc. (BSD License).
+- **Model Context Protocol (MCP) SDK**: Maintained by Anthropic & Linux Foundation (MIT License).
+- **Prometheus FastAPI Instrumentator**: Maintained by Pedro Igor / Trallnag (MIT License).
+- **Pytest & Pytest-Asyncio**: Maintained by Holger Krekel & Pytest team (MIT License).
+
+#### 3. Frontend Web Assets & UI Typography
+- **Inter Font Family**: Designed by Rasmus Andersson & Google Fonts (SIL Open Font License 1.1).
+- **Font Awesome Free (v6.5.1)**: Created by Fonticons, Inc. / Font Awesome team (CC BY 4.0 / SIL OFL 1.1 / MIT License).
+- **Leaflet.js**: Created by Volodymyr Agafonkin & Mapbox (BSD 2-Clause License).
