@@ -195,11 +195,9 @@ Comparativa técnica de nuestra solución en relación a las alternativas open-s
 
 ---
 
-## 🔬 Experimentos y Artículo Científico
+## 🔬 Experimentos
 
-El repositorio incluye la suite completa de pruebas cuantitativas y el manuscrito formal del artículo científico en la carpeta [`paper_experiments/`](file:///home/alonso/Proyectos/codigos-postales-api/paper_experiments):
-
-- **Manuscrito Académico:** [`paper_experiments/4_graficas_y_manuscrito/articulo_cientifico.md`](file:///home/alonso/Proyectos/codigos-postales-api/paper_experiments/4_graficas_y_manuscrito/articulo_cientifico.md)
+El proyecto cuenta con una suite completa de pruebas de carga, geofencing GPS, normalización fiscal e interoperabilidad con Agentes de Inteligencia Artificial (MCP).
 - **Fase 1 (Latencia y Lote):** Aceleración de **58.91x** en validación en lote (`POST /batch-validate`).
 - **Fase 2 (Normalización SAT):** $F_1$-Score algorítmico del **90.45%** con 100% de precisión en dataset de 1,000 muestras con ruido.
 - **Fase 3 (Agentes IA / MCP):** **99.43% de ahorro en tokens** al interoperar vía el Servidor MCP.
