@@ -17,14 +17,23 @@ ROOT_DIR = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT_DIR))
 
 from mcp.server.mcpserver import MCPServer
+from mcp.types import ToolAnnotations
 from app.api.v1.endpoints.codigos_postales import fetch_cp_data_from_db, normalize_search_text
 from app.core.database import get_db_connection
 
 # Inicializar Servidor MCP
 mcp = MCPServer("MX Postal Codes AI Server")
 
+# Anotaciones estándar para herramientas de solo lectura sobre catálogo local
+READ_ONLY_TOOL_ANNOTATIONS = ToolAnnotations(
+    read_only_hint=True,
+    destructive_hint=False,
+    idempotent_hint=True,
+    open_world_hint=False,
+)
 
-@mcp.tool()
+
+@mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
 def consultar_codigo_postal(cp: str) -> str:
     """
     Busca la información geográfica oficial de un Código Postal de México de 5 dígitos (ej. '01000', '64000').
@@ -48,7 +57,7 @@ def consultar_codigo_postal(cp: str) -> str:
     )
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
 def validar_direccion_postal(codigo_postal: str, colonia: str = "", estado: str = "", municipio: str = "") -> str:
     """
     Valida si una colonia, municipio o estado ingresados en un formulario o texto coinciden exactamente
@@ -88,7 +97,7 @@ def validar_direccion_postal(codigo_postal: str, colonia: str = "", estado: str 
     )
 
 
-@mcp.tool()
+@mcp.tool(annotations=READ_ONLY_TOOL_ANNOTATIONS)
 def buscar_asentamientos_por_nombre(nombre_colonia: str, limite: int = 10) -> str:
     """
     Busca colonias o asentamientos en todo México por nombre o palabra clave (insensible a acentos o mayúsculas).
