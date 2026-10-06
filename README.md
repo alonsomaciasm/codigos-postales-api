@@ -1,6 +1,6 @@
 # API de Códigos Postales de México 🇲🇽
 
-[![M8ven Score](https://m8ven.ai/badge/mcp/alonsomaciasm-codigos-postales-api-kty0l0)](https://m8ven.ai/mcp/alonsomaciasm-codigos-postales-api-kty0l0)
+[![M8ven Score](https://m8ven.ai/badge/mcp/alonsomaciasm-codigos-postales-api-kty0l0?v=b24c23687cbc209f8591dc8781e7d4fe)](https://m8ven.ai/mcp/alonsomaciasm-codigos-postales-api-kty0l0?s=readme)
 
 API RESTful ultra-rápida construida con **Python 3.12**, **FastAPI**, **SQLite en modo WAL** y **Docker**, diseñada para responder en **< 1 ms** con el catálogo oficial de Códigos Postales, Asentamientos, Municipios y Estados de México.
 
