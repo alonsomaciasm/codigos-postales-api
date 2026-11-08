@@ -151,10 +151,16 @@ def export_estado_pdf(
     import io
     import httpx
     from fastapi.responses import StreamingResponse
-    from reportlab.lib.pagesizes import letter
-    from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
-    from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-    from reportlab.lib import colors
+    try:
+        from reportlab.lib.pagesizes import letter
+        from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
+        from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
+        from reportlab.lib import colors
+    except ImportError:
+        raise HTTPException(
+            status_code=status.HTTP_501_NOT_IMPLEMENTED,
+            detail="La exportación a formato PDF requiere el paquete opcional 'reportlab'. Instálelo en el entorno con 'pip install reportlab'."
+        )
 
     clave_est = c_estado.zfill(2)
 
